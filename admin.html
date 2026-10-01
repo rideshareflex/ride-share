@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ride Share Flex | Admin Marketing Suite</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --accent: #10b981;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid #334155;
+    }
+    h1, h2 { color: #fff; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .stat-box {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    /* Hidden state until authenticated */
+    #admin-content { display: none; }
+    #login-box {
+      max-width: 400px;
+      margin: 100px auto;
+      text-align: center;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+    button:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- SIMPLE PASSWORD LOCK -->
+    <div id="login-box" class="card">
+      <h2>Admin Access</h2>
+      <p>Enter passkey to access marketing analytics:</p>
+      <input type="password" id="passkey" placeholder="Enter password...">
+      <button onclick="checkPassword()">Unlock Dashboard</button>
+      <p id="err-msg" style="color: #ef4444; display: none; margin-top: 10px;">Incorrect Password</p>
+    </div>
+
+    <!-- PRIVATE MARKETING DASHBOARD -->
+    <div id="admin-content">
+      <div class="card">
+        <h1>📊 Ride Share Flex | Digital Marketing Suite</h1>
+        <p>Private analytics, traffic metrics, and campaign trackers.</p>
+      </div>
+
+      <div class="card">
+        <h2>Performance Overview</h2>
+        <div class="grid">
+          <div class="stat-box">
+            <div class="stat-number" id="click-count">0</div>
+            <div>Affiliate Clicks</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="lead-count">0</div>
+            <div>Email Leads</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">$0.00</div>
+            <div>Est. Revenue</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Campaign UTM Link Generator</h2>
+        <p>Generate tracked links for Facebook, Reddit, or YouTube promotions:</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <input type="text" id="utm-source" placeholder="Source (e.g. facebook)" style="flex:1; padding:10px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#fff;">
+          <input type="text" id="utm-campaign" placeholder="Campaign (e.g. spring_promo)" style="flex:1; padding:10px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#fff;">
+        </div>
+        <button onclick="generateUTM()">Generate Tracking Link</button>
+        <p id="utm-result" style="margin-top:15px; font-family:monospace; color:var(--accent); word-break:break-all;"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set your custom password here
+    const SECRET_PIN = "1234"; // Change this to your preferred passcode
+
+    function checkPassword() {
+      const input = document.getElementById('passkey').value;
+      if (input === SECRET_PIN) {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+        loadLocalMetrics();
+      } else {
+        document.getElementById('err-msg').style.display = 'block';
+      }
+    }
+
+    function loadLocalMetrics() {
+      // Pull stored interaction metrics from local storage
+      const clicks = localStorage.getItem('rsf_affiliate_clicks') || '0';
+      const leads = localStorage.getItem('rsf_email_leads') || '0';
+      document.getElementById('click-count').innerText = clicks;
+      document.getElementById('lead-count').innerText = leads;
+    }
+
+    function generateUTM() {
+      const source = document.getElementById('utm-source').value || 'social';
+      const campaign = document.getElementById('utm-campaign').value || 'general';
+      const baseUrl = window.location.origin;
+      const finalUrl = `${baseUrl}/index.html?utm_source=${encodeURIComponent(source)}&utm_campaign=${encodeURIComponent(campaign)}`;
+      document.getElementById('utm-result').innerText = finalUrl;
+    }
+  </script>
+</body>
+</html>
