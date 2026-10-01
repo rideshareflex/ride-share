@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Share Flex | Driver Resources, Gear & Affiliate Marketing Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        flex: {
+                            purple: '#6D28D9',
+                            brightpurple: '#8B5CF6',
+                            cyan: '#06B6D4',
+                            neon: '#22D3EE',
+                            dark: '#0B0F19',
+                            card: '#151C2C',
+                            border: '#2A344B',
+                            accent: '#F43F5E',
+                            gold: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #F3F4F6;
+        }
+        .glow-purple {
+            box-shadow: 0 0 35px -5px rgba(109, 40, 217, 0.35);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.35);
+        }
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(42, 52, 75, 0.6);
+        }
+        .glass-card {
+            background: rgba(21, 28, 44, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(42, 52, 75, 0.8);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #A78BFA 0%, #22D3EE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #6D28D9 0%, #06B6D4 100%);
+        }
+        .gradient-btn:hover {
+            background: linear-gradient(135deg, #5B21B6 0%, #0891B2 100%);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-flex-brightpurple selection:text-white">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 bg-flex-card border border-flex-cyan text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 transition-all duration-300">
+        <div class="w-10 h-10 rounded-xl bg-flex-cyan/20 flex items-center justify-center text-flex-cyan">
+            <i id="toast-icon" class="fas fa-check"></i>
+        </div>
+        <div>
+            <p id="toast-title" class="font-bold text-sm">Action Completed</p>
+            <p id="toast-desc" class="text-xs text-gray-400">Your request was processed.</p>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="sticky top-0 z-40 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('hub')">
+                    <div class="w-11 h-11 gradient-btn rounded-xl flex items-center justify-center shadow-lg shadow-flex-purple/30">
+                        <i class="fas fa-car-side text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-white">RIDE SHARE <span class="gradient-text">FLEX</span></span>
+                        <span class="block text-[10px] text-flex-cyan font-semibold tracking-widest uppercase">Gig Driver & Affiliate Hub</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 bg-flex-dark/80 p-1.5 rounded-2xl border border-flex-border">
+                    <button id="nav-hub" onclick="switchView('hub')" class="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-flex-purple text-white shadow-md">
+                        <i class="fas fa-th-large mr-1.5"></i>Hub
+                    </button>
+                    <button id="nav-apps" onclick="switchView('apps')" class="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white">
+                        <i class="fas fa-gift mr-1.5"></i>Rideshare Apps
+                    </button>
+                    <button id="nav-gear" onclick="switchView('gear')" class="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white">
+                        <i class="fas fa-shopping-bag mr-1.5"></i>Driver Gear
+                    </button>
+                    <button id="nav-blog" onclick="switchView('blog')" class="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white">
+                        <i class="fas fa-newspaper mr-1.5"></i>Tips & Guides
+                    </button>
+                    <button id="nav-marketing" onclick="switchView('marketing')" class="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white">
+                        <i class="fas fa-chart-line mr-1.5"></i>Marketing Suite
+                    </button>
+                </div>
+
+                <!-- Action Button -->
+                <div class="hidden lg:flex items-center space-x-3">
+                    <button onclick="scrollToNewsletter()" class="gradient-btn text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-xl shadow-lg transition-all hover:scale-105">
+                        <i class="fas fa-envelope mr-1.5"></i> Get Driver Promos
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-white text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-flex-card border-b border-flex-border px-4 py-6 space-y-3">
+            <button onclick="switchView('hub'); toggleMobileMenu()" class="w-full text-left font-bold text-sm text-white py-2"><i class="fas fa-th-large text-flex-cyan mr-2"></i> Main Hub</button>
+            <button onclick="switchView('apps'); toggleMobileMenu()" class="w-full text-left font-bold text-sm text-white py-2"><i class="fas fa-gift text-flex-brightpurple mr-2"></i> App Recommendations</button>
+            <button onclick="switchView('gear'); toggleMobileMenu()" class="w-full text-left font-bold text-sm text-white py-2"><i class="fas fa-shopping-bag text-flex-gold mr-2"></i> Driver Gear Store</button>
+            <button onclick="switchView('blog'); toggleMobileMenu()" class="w-full text-left font-bold text-sm text-white py-2"><i class="fas fa-newspaper text-emerald-400 mr-2"></i> Driver Blog & Tips</button>
+            <button onclick="switchView('marketing'); toggleMobileMenu()" class="w-full text-left font-bold text-sm text-white py-2"><i class="fas fa-chart-line text-flex-neon mr-2"></i> Marketing Suite</button>
+        </div>
+    </nav>
+
+    <!-- VIEW 1: MAIN HUB VIEW -->
+    <div id="view-hub" class="space-y-16 py-10">
+        
+        <!-- Hero Banner -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-flex-purple/20 rounded-full blur-[140px] pointer-events-none"></div>
+            
+            <div class="glass-card rounded-3xl p-8 sm:p-12 lg:p-16 border border-flex-border relative z-10 text-center max-w-4xl mx-auto">
+                <span class="inline-flex items-center space-x-2 bg-flex-dark border border-flex-border px-4 py-2 rounded-full mb-6">
+                    <span class="w-2.5 h-2.5 rounded-full bg-flex-neon animate-pulse"></span>
+                    <span class="text-xs font-semibold text-gray-300">The Ultimate Hub for Gig Drivers & Passengers</span>
+                </span>
+
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                    Promoting Top Rideshare Apps, <br>
+                    <span class="gradient-text">Driver Perks & Essential Accessories</span>
+                </h1>
+
+                <p class="text-gray-300 text-sm sm:text-base mt-6 max-w-2xl mx-auto leading-relaxed">
+                    Compare sign-up bonuses, get top rider promos, explore must-have car amenities that boost passenger ratings & tips, and access our interactive driver ROI calculator.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                    <button onclick="switchView('apps')" class="gradient-btn text-white font-extrabold px-8 py-4 rounded-xl shadow-xl transition-all text-xs uppercase tracking-wider">
+                        Explore App Referral Bonuses
+                    </button>
+                    <button onclick="switchView('gear')" class="bg-flex-dark hover:bg-flex-border text-white font-bold px-8 py-4 rounded-xl border border-flex-border transition-all text-xs uppercase tracking-wider">
+                        Shop Rated Driver Accessories
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- APP RECOMMENDATIONS & REFERRAL HUB -->
+        <section id="apps-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
+                <div>
+                    <span class="text-xs font-bold text-flex-cyan uppercase tracking-widest">Recommended Apps</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Driver Sign-Up Bonuses & Rider Promos</h2>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1">Sign up through our verified partner links to claim exclusive driver welcome bonuses.</p>
+                </div>
+                <button onclick="switchView('apps')" class="text-xs font-bold text-flex-brightpurple hover:text-white mt-3 md:mt-0 uppercase tracking-wider flex items-center">
+                    View All Apps <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- App Cards Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Uber Card -->
+                <div class="glass-card p-6 rounded-2xl border border-flex-border hover:border-flex-brightpurple transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-black text-white font-black text-xl rounded-xl flex items-center justify-center border border-gray-700">
+                                Uber
+                            </div>
+                            <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-emerald-500/30 uppercase">
+                                Bonus Up To $1,000
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Uber Driver & Eats</h3>
+                        <p class="text-xs text-gray-400 mt-2">Earn guarantee upon completing initial trips. High demand in all metro areas.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border">
+                        <a href="https://www.uber.com" target="_blank" onclick="trackAffiliateClick('Uber Driver Bonus')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider block shadow-md hover:brightness-110">
+                            Claim Uber Bonus <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Lyft Card -->
+                <div class="glass-card p-6 rounded-2xl border border-flex-border hover:border-flex-brightpurple transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-pink-600 text-white font-black text-xl rounded-xl flex items-center justify-center">
+                                Lyft
+                            </div>
+                            <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-emerald-500/30 uppercase">
+                                $500 Guarantee
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Lyft Driver</h3>
+                        <p class="text-xs text-gray-400 mt-2">Flexible weekly payouts, driver streak bonuses, and destination filters.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border">
+                        <a href="https://www.lyft.com" target="_blank" onclick="trackAffiliateClick('Lyft Driver Bonus')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider block shadow-md hover:brightness-110">
+                            Claim Lyft Bonus <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DoorDash Card -->
+                <div class="glass-card p-6 rounded-2xl border border-flex-border hover:border-flex-brightpurple transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-red-600 text-white font-black text-xl rounded-xl flex items-center justify-center">
+                                DD
+                            </div>
+                            <span class="bg-flex-cyan/20 text-flex-cyan text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-flex-cyan/30 uppercase">
+                                Fast Approval
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">DoorDash Dasher</h3>
+                        <p class="text-xs text-gray-400 mt-2">Deliver food & groceries. Drive anytime without rigid passenger vehicle rules.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border">
+                        <a href="https://www.doordash.com" target="_blank" onclick="trackAffiliateClick('DoorDash Dasher')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider block shadow-md hover:brightness-110">
+                            Sign Up Dasher <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Instacart Card -->
+                <div class="glass-card p-6 rounded-2xl border border-flex-border hover:border-flex-brightpurple transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-emerald-600 text-white font-black text-xl rounded-xl flex items-center justify-center">
+                                IC
+                            </div>
+                            <span class="bg-flex-gold/20 text-flex-gold text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-flex-gold/30 uppercase">
+                                High Tip Potential
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Instacart Shopper</h3>
+                        <p class="text-xs text-gray-400 mt-2">Shop and deliver groceries. Excellent alternative during non-peak ride hours.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border">
+                        <a href="https://www.instacart.com" target="_blank" onclick="trackAffiliateClick('Instacart Shopper')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider block shadow-md hover:brightness-110">
+                            Become Shopper <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRIVER GEAR & ACCESSORIES STOREFRONT SHOWCASE -->
+        <section id="gear-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-flex-card/60 p-8 rounded-3xl border border-flex-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                    <div>
+                        <span class="text-xs font-bold text-flex-gold uppercase tracking-widest">Driver Approved Products</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Rideshare Accessories & Passenger Amenities</h2>
+                        <p class="text-gray-400 text-xs sm:text-sm mt-1">Boost rider 5-star ratings, increase tips, and protect your vehicle with recommended gear.</p>
+                    </div>
+
+                    <!-- Filter buttons -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterGear('all')" class="gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-purple text-white">All Items</button>
+                        <button onclick="filterGear('Electronics')" class="gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-dark border border-flex-border text-gray-400 hover:text-white">Electronics</button>
+                        <button onclick="filterGear('Amenities')" class="gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-dark border border-flex-border text-gray-400 hover:text-white">Passenger Amenities</button>
+                        <button onclick="filterGear('Safety')" class="gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-dark border border-flex-border text-gray-400 hover:text-white">Safety & Care</button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="gear-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Product items dynamically populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE CALCULATOR SECTION -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 lg:p-12 border border-flex-border">
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-5 space-y-4">
+                        <span class="text-xs font-bold text-flex-cyan uppercase tracking-widest">Smart Calculator</span>
+                        <h2 class="text-3xl font-black text-white">Estimate Earnings, Tax Deductions & Gear ROI</h2>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Calculate estimated weekly net income, track potential tax write-offs based on mileage, and see how simple passenger amenities pay for themselves in tips.
+                        </p>
+                        
+                        <div class="space-y-3 pt-2 text-xs">
+                            <div class="flex items-center text-gray-300"><i class="fas fa-check text-flex-neon mr-2.5"></i> Standard IRS Mileage Rate Deduction Estimates</div>
+                            <div class="flex items-center text-gray-300"><i class="fas fa-check text-flex-neon mr-2.5"></i> Tip Increase Projection with Backseat Organizers</div>
+                            <div class="flex items-center text-gray-300"><i class="fas fa-check text-flex-neon mr-2.5"></i> Multi-App Efficiency Booster Ratio</div>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Form Controls -->
+                    <div class="lg:col-span-7 bg-flex-dark p-6 sm:p-8 rounded-2xl border border-flex-border">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Weekly Miles Driven</label>
+                                <input type="number" id="calc-miles" value="450" oninput="calculateDriverROI()" class="w-full bg-flex-card border border-flex-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-flex-brightpurple">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Avg. Fare Revenue / Hr ($)</label>
+                                <input type="number" id="calc-hourly" value="28" oninput="calculateDriverROI()" class="w-full bg-flex-card border border-flex-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-flex-brightpurple">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Weekly Hours Worked</label>
+                                <input type="number" id="calc-hours" value="30" oninput="calculateDriverROI()" class="w-full bg-flex-card border border-flex-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-flex-brightpurple">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Gear Investment ($)</label>
+                                <input type="number" id="calc-gear-cost" value="120" oninput="calculateDriverROI()" class="w-full bg-flex-card border border-flex-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-flex-brightpurple">
+                            </div>
+                        </div>
+
+                        <!-- Results Card -->
+                        <div class="mt-6 p-6 bg-flex-card rounded-xl border border-flex-border grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold">Gross Weekly Income</span>
+                                <p id="res-gross" class="text-xl font-black text-white mt-1">$840.00</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold">Estimated Mileage Deduction</span>
+                                <p id="res-tax" class="text-xl font-black text-emerald-400 mt-1">$301.50</p>
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <span class="text-[10px] text-gray-400 uppercase font-bold">Gear Payback Time</span>
+                                <p id="res-payback" class="text-xl font-black text-flex-neon mt-1">~ 1.8 Weeks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- VIEW 2: RIDESHARE APPS FULL SECTION -->
+    <div id="view-apps" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        <div class="bg-flex-card p-8 rounded-3xl border border-flex-border">
+            <h1 class="text-3xl font-extrabold text-white">Full Platform Partner Directory</h1>
+            <p class="text-gray-400 text-sm mt-1">Sign up for multiple gig apps to maximize your hourly earnings by eliminating downtime.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Uber -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-black text-white font-bold text-xl rounded-xl flex items-center justify-center mb-4">Uber</div>
+                <h3 class="font-bold text-white text-lg">Uber & Uber Eats</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">The largest rideshare and food delivery ecosystem globally. Continuous trip requests.</p>
+                <a href="https://www.uber.com" target="_blank" onclick="trackAffiliateClick('Uber Main Hub')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Sign Up Driver <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+
+            <!-- Lyft -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-pink-600 text-white font-bold text-xl rounded-xl flex items-center justify-center mb-4">Lyft</div>
+                <h3 class="font-bold text-white text-lg">Lyft Passenger Rides</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Known for driver rewards, upfront pay visibility in select markets, and bonus zones.</p>
+                <a href="https://www.lyft.com" target="_blank" onclick="trackAffiliateClick('Lyft Main Hub')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Sign Up Driver <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+
+            <!-- DoorDash -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-red-600 text-white font-bold text-xl rounded-xl flex items-center justify-center mb-4">DD</div>
+                <h3 class="font-bold text-white text-lg">DoorDash Food Delivery</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Market leader in food delivery. Great for drivers with 2-door vehicles or older cars.</p>
+                <a href="https://www.doordash.com" target="_blank" onclick="trackAffiliateClick('DoorDash Main Hub')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Sign Up Dasher <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+
+            <!-- Grubhub -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-orange-600 text-white font-bold text-xl rounded-xl flex items-center justify-center mb-4">GH</div>
+                <h3 class="font-bold text-white text-lg">Grubhub Delivery</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Scheduled block earnings guarantee and strong dinner surge orders.</p>
+                <a href="https://www.grubhub.com" target="_blank" onclick="trackAffiliateClick('Grubhub Link')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Apply to Deliver <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+
+            <!-- Amazon Flex -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-amber-500 text-black font-bold text-xl rounded-xl flex items-center justify-center mb-4">AF</div>
+                <h3 class="font-bold text-white text-lg">Amazon Flex Package Delivery</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Reserve 3-5 hour package delivery blocks with predictable set block pay.</p>
+                <a href="https://flex.amazon.com" target="_blank" onclick="trackAffiliateClick('Amazon Flex Link')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Explore Blocks <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+
+            <!-- TaskRabbit -->
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="w-12 h-12 bg-emerald-500 text-white font-bold text-xl rounded-xl flex items-center justify-center mb-4">TR</div>
+                <h3 class="font-bold text-white text-lg">TaskRabbit Local Services</h3>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Offer moving help, handyman skills, or furniture assembly at your own rates.</p>
+                <a href="https://www.taskrabbit.com" target="_blank" onclick="trackAffiliateClick('TaskRabbit Link')" class="w-full gradient-btn text-center text-white font-bold py-2.5 rounded-xl text-xs uppercase block">Become Tasker <i class="fas fa-external-link-alt ml-1"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: FULL DRIVER GEAR CATALOG -->
+    <div id="view-gear" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <div class="bg-flex-card p-8 rounded-3xl border border-flex-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-extrabold text-white">Full Driver Gear Marketplace</h1>
+                <p class="text-gray-400 text-sm mt-1">High-rated products selected specifically to make driving safer, cleaner, and more lucrative.</p>
+            </div>
+            
+            <input type="text" id="gear-search" oninput="searchGear()" placeholder="Search gear (e.g. dashcam, cables)..." class="bg-flex-dark border border-flex-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-flex-brightpurple w-full md:w-72">
+        </div>
+
+        <div id="full-gear-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- VIEW 4: DRIVER BLOG & TIPS SECTION -->
+    <div id="view-blog" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        <div class="bg-flex-card p-8 rounded-3xl border border-flex-border">
+            <h1 class="text-3xl font-extrabold text-white">Driver Knowledge Center & Strategies</h1>
+            <p class="text-gray-400 text-sm mt-1">Expert articles written by veteran drivers with over 10,000 completed rides.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <article class="glass-card rounded-2xl border border-flex-border overflow-hidden flex flex-col justify-between">
+                <div class="p-6 space-y-3">
+                    <span class="text-[10px] font-bold text-flex-neon uppercase bg-flex-dark px-2.5 py-1 rounded-md border border-flex-border">Earnings Strategy</span>
+                    <h3 class="text-lg font-bold text-white hover:text-flex-brightpurple transition-all cursor-pointer">The Art of Multi-Apping: How to Earn $35+/Hour</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Learn how to alternate between Uber, Lyft, and DoorDash simultaneously without tanking your acceptance ratings.</p>
+                </div>
+                <div class="p-6 border-t border-flex-border/60 text-xs text-gray-500 flex justify-between items-center">
+                    <span>5 Min Read</span>
+                    <button onclick="readArticle('Multi-Apping Guide')" class="text-flex-cyan font-bold hover:underline">Read Article →</button>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-2xl border border-flex-border overflow-hidden flex flex-col justify-between">
+                <div class="p-6 space-y-3">
+                    <span class="text-[10px] font-bold text-flex-gold uppercase bg-flex-dark px-2.5 py-1 rounded-md border border-flex-border">Taxes & Finances</span>
+                    <h3 class="text-lg font-bold text-white hover:text-flex-brightpurple transition-all cursor-pointer">Top 7 Tax Write-Offs Gig Drivers Frequently Miss</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">From cell phone bills and car washes to passenger snacks, don't leave thousands of dollars on the table at tax time.</p>
+                </div>
+                <div class="p-6 border-t border-flex-border/60 text-xs text-gray-500 flex justify-between items-center">
+                    <span>7 Min Read</span>
+                    <button onclick="readArticle('Tax Write-Offs Guide')" class="text-flex-cyan font-bold hover:underline">Read Article →</button>
+                </div>
+            </article>
+
+            <article class="glass-card rounded-2xl border border-flex-border overflow-hidden flex flex-col justify-between">
+                <div class="p-6 space-y-3">
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase bg-flex-dark px-2.5 py-1 rounded-md border border-flex-border">Passenger Tips</span>
+                    <h3 class="text-lg font-bold text-white hover:text-flex-brightpurple transition-all cursor-pointer">How Passenger Amenities Double Your Cash Tips</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Discover why multi-head charging cables and back-seat organizers turn routine rides into 5-star tipped trips.</p>
+                </div>
+                <div class="p-6 border-t border-flex-border/60 text-xs text-gray-500 flex justify-between items-center">
+                    <span>4 Min Read</span>
+                    <button onclick="readArticle('Passenger Amenities Guide')" class="text-flex-cyan font-bold hover:underline">Read Article →</button>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- VIEW 5: DIGITAL MARKETING DASHBOARD & PROMO KIT -->
+    <div id="view-marketing" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        
+        <!-- Header Banner -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-flex-card p-8 rounded-3xl border border-flex-border gap-4">
+            <div>
+                <span class="text-xs font-bold text-flex-cyan uppercase tracking-widest">Affiliate Revenue Engine</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Ride Share Flex Digital Marketing Suite</h1>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Track app referral clicks, affiliate product sales revenue, and manage driver lead generation.</p>
+            </div>
+            <button onclick="copyPromotionalKit()" class="gradient-btn text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-lg flex items-center">
+                <i class="fas fa-share-alt mr-2"></i> Copy Affiliate Promo Kit
+            </button>
+        </div>
+
+        <!-- Growth Metrics KPI Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Monthly Referral Clicks</span>
+                    <span id="kpi-click-growth" class="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">+24%</span>
+                </div>
+                <p id="kpi-clicks" class="text-3xl font-black text-white mt-2">12,480</p>
+                <p class="text-[11px] text-gray-400 mt-1">Target: 15,000 monthly clicks</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Est. Affiliate Earnings</span>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">+$480 today</span>
+                </div>
+                <p id="kpi-revenue" class="text-3xl font-black text-flex-neon mt-2">$3,240.50</p>
+                <p class="text-[11px] text-gray-400 mt-1">App Bonuses + Amazon Gear Fees</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Driver Email Leads</span>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">+145 this week</span>
+                </div>
+                <p id="kpi-leads" class="text-3xl font-black text-white mt-2">1,890</p>
+                <p class="text-[11px] text-gray-400 mt-1">Weekly Newsletter Subscribers</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl border border-flex-border">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Top Converting Platform</span>
+                    <span class="bg-flex-purple/20 text-flex-brightpurple text-[10px] px-2 py-0.5 rounded-full font-bold">38% Share</span>
+                </div>
+                <p class="text-3xl font-black text-white mt-2">Uber Driver</p>
+                <p class="text-[11px] text-gray-400 mt-1">Highest payouts per bonus</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Analytics Chart -->
+            <div class="lg:col-span-2 glass-card p-6 rounded-3xl border border-flex-border">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-white text-base">Monthly Referral Clicks & Revenue Trend</h3>
+                    <span class="text-xs text-gray-400">Live Simulated Traffic</span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="affiliateChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Custom Affiliate Link Generator -->
+            <div class="glass-card p-6 rounded-3xl border border-flex-border space-y-4">
+                <h3 class="font-bold text-white text-base border-b border-flex-border pb-3 flex items-center">
+                    <i class="fas fa-link text-flex-brightpurple mr-2"></i> Custom Link Tag Generator
+                </h3>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Target Offer</label>
+                    <select id="link-target" onchange="generateCustomLink()" class="w-full bg-flex-dark border border-flex-border rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+                        <option value="uber">Uber Driver Sign-Up ($1000 Bonus)</option>
+                        <option value="lyft">Lyft Driver Sign-Up ($500 Bonus)</option>
+                        <option value="doordash">DoorDash Dasher Sign-Up</option>
+                        <option value="gear">Top 10 Rideshare Car Accessories Store</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Custom Tracked Referral URL</label>
+                    <input type="text" id="link-output" readonly class="w-full bg-flex-dark border border-flex-border rounded-xl p-3 text-xs text-flex-cyan focus:outline-none font-mono">
+                </div>
+
+                <button onclick="copyGeneratedLink()" class="w-full bg-flex-purple hover:bg-flex-brightpurple text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all">
+                    Copy Referral Link
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EMAIL NEWSLETTER LEAD CAPTURE SECTION -->
+    <section id="newsletter-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="glass-card p-8 sm:p-12 rounded-3xl border border-flex-border text-center max-w-3xl mx-auto relative overflow-hidden">
+            <div class="relative z-10 space-y-4">
+                <span class="text-xs font-extrabold text-flex-neon uppercase tracking-widest bg-flex-dark px-3 py-1 rounded-full border border-flex-border">
+                    Weekly Driver Digest
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Get Surge Maps, Promo Codes & Tax Tips Weekly</h2>
+                <p class="text-gray-300 text-xs sm:text-sm max-w-xl mx-auto">
+                    Join over 15,000+ drivers receiving our high-yielding gig strategy emails every Monday.
+                </p>
+
+                <form onsubmit="handleLeadCapture(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
+                    <input type="email" id="lead-email" required placeholder="Enter your email address" class="bg-flex-dark border border-flex-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-flex-brightpurple flex-1">
+                    <button type="submit" class="gradient-btn text-white font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">
+                        Subscribe Free
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-flex-dark border-t border-flex-border py-12 text-xs text-gray-400 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 gradient-btn rounded-lg flex items-center justify-center text-white">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <span class="text-white font-bold text-base">Ride Share Flex</span>
+            </div>
+            <p class="text-center md:text-left">© 2026 Ride Share Flex Hub. Independent affiliate website & marketing platform for gig workers.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Driver Accessories Catalog Data
+        const gearCatalog = [
+            {
+                id: 1,
+                title: "360° Magnetic Dash Phone Mount",
+                category: "Electronics",
+                rating: "4.9 ★",
+                price: "$18.99",
+                image: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=400&auto=format&fit=crop&q=60",
+                desc: "Ultra-strong magnet keeps GPS visible without blocking air vents or windshield view.",
+                affiliateUrl: "https://www.amazon.com"
+            },
+            {
+                id: 2,
+                title: "Dual 4K Front & Cabin Dash Cam",
+                category: "Electronics",
+                rating: "4.8 ★",
+                price: "$129.99",
+                image: "https://images.unsplash.com/photo-1508974239320-0a029497e820?w=400&auto=format&fit=crop&q=60",
+                desc: "Night vision cabin recording for driver protection, false claim safety, and insurance evidence.",
+                affiliateUrl: "https://www.amazon.com"
+            },
+            {
+                id: 3,
+                title: "Backseat Organizer with Multi-Charging",
+                category: "Amenities",
+                rating: "4.9 ★",
+                price: "$29.99",
+                image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&auto=format&fit=crop&q=60",
+                desc: "Includes retractable iPhone/Type-C charging cables, tissue box holder, and water bottle pockets.",
+                affiliateUrl: "https://www.amazon.com"
+            },
+            {
+                id: 4,
+                title: "Embossed Passenger Emesis Bags (10-Pk)",
+                category: "Safety",
+                rating: "5.0 ★",
+                price: "$12.50",
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&auto=format&fit=crop&q=60",
+                desc: "A weekend night driver essential. Prevents $200+ car detailing bills from motion sickness.",
+                affiliateUrl: "https://www.amazon.com"
+            },
+            {
+                id: 5,
+                title: "RGB Sound-Activated Interior LED Lights",
+                category: "Amenities",
+                rating: "4.7 ★",
+                price: "$21.99",
+                image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=400&auto=format&fit=crop&q=60",
+                desc: "Creates a cool lounge atmosphere for nighttime passengers. Boosts 5-star ratings.",
+                affiliateUrl: "https://www.amazon.com"
+            },
+            {
+                id: 6,
+                title: "Portable Digital Tire Inflator & Pump",
+                category: "Safety",
+                rating: "4.9 ★",
+                price: "$44.99",
+                image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&auto=format&fit=crop&q=60",
+                desc: "Cordless battery air pump. Inflate low tires in under 3 minutes without gas station stops.",
+                affiliateUrl: "https://www.amazon.com"
+            }
+        ];
+
+        // Dynamic View Switcher
+        function switchView(viewName) {
+            const views = ['hub', 'apps', 'gear', 'blog', 'marketing'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const nav = document.getElementById(`nav-${v}`);
+                if (el) el.classList.add('hidden');
+                if (nav) {
+                    nav.className = "px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white";
+                }
+            });
+
+            const targetView = document.getElementById(`view-${viewName}`);
+            const targetNav = document.getElementById(`nav-${viewName}`);
+            if (targetView) targetView.classList.remove('hidden');
+            if (targetNav) {
+                targetNav.className = "px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-flex-purple text-white shadow-md";
+            }
+
+            if (viewName === 'marketing') {
+                initAffiliateChart();
+                generateCustomLink();
+            }
+            if (viewName === 'gear') {
+                renderFullGearCatalog(gearCatalog);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Featured Gear Grid
+        function renderGearGrid(items) {
+            const container = document.getElementById('gear-grid');
+            if (!container) return;
+            container.innerHTML = items.map(item => `
+                <div class="glass-card rounded-2xl p-5 border border-flex-border flex flex-col justify-between hover:border-flex-brightpurple transition-all">
+                    <div>
+                        <div class="h-40 rounded-xl overflow-hidden mb-4 relative">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-flex-dark/90 text-flex-gold text-[10px] font-bold px-2 py-1 rounded-md border border-flex-border">
+                                ${item.rating}
+                            </span>
+                        </div>
+                        <span class="text-[10px] font-bold text-flex-cyan uppercase tracking-wider">${item.category}</span>
+                        <h3 class="text-base font-bold text-white mt-1">${item.title}</h3>
+                        <p class="text-xs text-gray-400 mt-2 leading-relaxed">${item.desc}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border/60 flex items-center justify-between">
+                        <span class="text-lg font-black text-white">${item.price}</span>
+                        <a href="${item.affiliateUrl}" target="_blank" onclick="trackAffiliateClick('${item.title}')" class="gradient-btn text-white text-xs font-bold px-4 py-2 rounded-xl uppercase">
+                            Buy On Amazon <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Full Gear View
+        function renderFullGearCatalog(items) {
+            const container = document.getElementById('full-gear-grid');
+            if (!container) return;
+            container.innerHTML = items.map(item => `
+                <div class="glass-card rounded-2xl p-5 border border-flex-border flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 rounded-xl overflow-hidden mb-4 relative">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-flex-dark/90 text-flex-gold text-[10px] font-bold px-2 py-1 rounded-md border border-flex-border">
+                                ${item.rating}
+                            </span>
+                        </div>
+                        <span class="text-[10px] font-bold text-flex-cyan uppercase tracking-wider">${item.category}</span>
+                        <h3 class="text-base font-bold text-white mt-1">${item.title}</h3>
+                        <p class="text-xs text-gray-400 mt-2 leading-relaxed">${item.desc}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-flex-border/60 flex items-center justify-between">
+                        <span class="text-lg font-black text-white">${item.price}</span>
+                        <a href="${item.affiliateUrl}" target="_blank" onclick="trackAffiliateClick('${item.title}')" class="gradient-btn text-white text-xs font-bold px-4 py-2 rounded-xl uppercase">
+                            Buy On Amazon <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Accessories
+        function filterGear(category) {
+            const btns = document.querySelectorAll('.gear-filter-btn');
+            btns.forEach(btn => {
+                btn.className = "gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-dark border border-flex-border text-gray-400 hover:text-white";
+            });
+            event.target.className = "gear-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all bg-flex-purple text-white";
+
+            if (category === 'all') {
+                renderGearGrid(gearCatalog);
+            } else {
+                const filtered = gearCatalog.filter(g => g.category === category);
+                renderGearGrid(filtered);
+            }
+        }
+
+        // Search Gear in Full Catalog View
+        function searchGear() {
+            const query = document.getElementById('gear-search').value.toLowerCase();
+            const filtered = gearCatalog.filter(g => 
+                g.title.toLowerCase().includes(query) || 
+                g.desc.toLowerCase().includes(query) ||
+                g.category.toLowerCase().includes(query)
+            );
+            renderFullGearCatalog(filtered);
+        }
+
+        // Calculator Logic
+        function calculateDriverROI() {
+            const miles = parseFloat(document.getElementById('calc-miles').value) || 0;
+            const hourly = parseFloat(document.getElementById('calc-hourly').value) || 0;
+            const hours = parseFloat(document.getElementById('calc-hours').value) || 0;
+            const gearCost = parseFloat(document.getElementById('calc-gear-cost').value) || 0;
+
+            const gross = hourly * hours;
+            const irsTaxDeduction = miles * 0.67; // ~$0.67 standard tax rate
+            const estEstTipIncrease = gross * 0.08; // ~8% tip boost with amenities
+            const paybackWeeks = gearCost > 0 ? (gearCost / (estEstTipIncrease || 15)).toFixed(1) : 0;
+
+            document.getElementById('res-gross').innerText = `$${gross.toFixed(2)}`;
+            document.getElementById('res-tax').innerText = `$${irsTaxDeduction.toFixed(2)}`;
+            document.getElementById('res-payback').innerText = `~ ${paybackWeeks} Weeks`;
+        }
+
+        // Toast Helper
+        function showToast(title, desc) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-desc').innerText = desc;
+            
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        // Affiliate Link Tracking Simulation
+        let currentClicks = 12480;
+        let currentRevenue = 3240.50;
+
+        function trackAffiliateClick(itemName) {
+            currentClicks += 1;
+            currentRevenue += 12.50; // simulated commission increment
+            document.getElementById('kpi-clicks').innerText = currentClicks.toLocaleString();
+            document.getElementById('kpi-revenue').innerText = `$${currentRevenue.toFixed(2)}`;
+            showToast('Affiliate Link Clicked', `Redirecting to partner offer: ${itemName}`);
+        }
+
+        // Lead Capture Handler
+        function handleLeadCapture(e) {
+            e.preventDefault();
+            const email = document.getElementById('lead-email').value;
+            showToast('Subscribed!', `${email} added to Driver Newsletter.`);
+            document.getElementById('lead-email').value = '';
+            
+            // Increment KPI
+            const leads = document.getElementById('kpi-leads');
+            if (leads) {
+                const currentLeads = parseInt(leads.innerText.replace(',', '')) + 1;
+                leads.innerText = currentLeads.toLocaleString();
+            }
+        }
+
+        // Custom Link Generator
+        function generateCustomLink() {
+            const target = document.getElementById('link-target').value;
+            const baseURL = "https://rideshareflex.com/ref?tag=flexhub2026&offer=";
+            document.getElementById('link-output').value = baseURL + target;
+        }
+
+        function copyGeneratedLink() {
+            const input = document.getElementById('link-output');
+            input.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'Custom tracking link copied to clipboard.');
+        }
+
+        function copyPromotionalKit() {
+            showToast('Kit Copied!', 'Full referral kit & promo banner codes copied.');
+        }
+
+        function readArticle(title) {
+            showToast('Opening Guide', `Loading knowledge article: ${title}`);
+        }
+
+        function scrollToNewsletter() {
+            document.getElementById('newsletter-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Initialize Analytics Chart
+        let affiliateChartInit = false;
+        function initAffiliateChart() {
+            if (affiliateChartInit) return;
+            const ctx = document.getElementById('affiliateChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Referral Clicks',
+                            data: [4200, 5800, 7100, 8900, 10500, 12480],
+                            borderColor: '#06B6D4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Affiliate Revenue ($)',
+                            data: [1200, 1650, 2100, 2450, 2890, 3240],
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#9CA3AF' } } },
+                    scales: {
+                        y: { grid: { color: 'rgba(42, 52, 75, 0.5)' }, ticks: { color: '#9CA3AF' } },
+                        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
+                    }
+                }
+            });
+            affiliateChartInit = true;
+        }
+
+        // On Page Load
+        window.onload = function() {
+            renderGearGrid(gearCatalog);
+            calculateDriverROI();
+        };
+    </script>
+</body>
+</html>
